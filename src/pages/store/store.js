@@ -1,19 +1,26 @@
-import { createStore } from 'vuex';
-import AuthModule from './AuthModule';
+import { createStore } from "vuex";
+import AuthModule from "./AuthModule";
+import FileModule from "./FileModule";
 
 // Create a new store instance.
 const store = createStore({
   modules: {
     auth: AuthModule,
+    file: FileModule,
   },
   state() {
     return {
-      count: 0,
-      message: 'message from vue',
+      alert_message: null,
     };
   },
-  mutations: {},
-  getters: {},
+  getters: {
+    alert_message: (state) => state.alert_message,
+  },
+  mutations: {
+    setAlertMessage(state, payload){
+      state.alert_message = payload
+    }
+  },
 });
 
 export default store;
