@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 const AuthModule = {
   actions: {
@@ -12,6 +12,7 @@ const AuthModule = {
             name: payload.name,
             email: payload.email,
             emailverified: false,
+            photo_url: payload.photoURL
           });
           let newuser = data.user;
           newuser
