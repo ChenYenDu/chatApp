@@ -59,9 +59,13 @@
 <script>
 // import { f7 } from "framework7-vue";
 import { mixin } from "../../js/mixin";
+import routes from '../../js/routes';
 
 export default {
   mixins: [mixin],
+  props: {
+    f7router: Object,
+  },
   data() {
     return {
       name: null,
@@ -76,8 +80,17 @@ export default {
     files() {
       return this.$store.getters.files;
     },
+    signed_up(){
+      return this.$store.getters.signed_up;
+    }
   },
-
+  watch: {
+    signed_up(value){
+      if (value == true) {
+        this.f7router.navigate('/signin/')
+      }
+    }
+  },
   methods: {
     launchFilePicker() {
       let self = this;
@@ -106,6 +119,9 @@ export default {
       }
     },
   },
+  created: function(){
+    this.$store.commit('setSignedUp', false)
+  }
 };
 </script>
 
