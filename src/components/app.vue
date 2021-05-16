@@ -32,7 +32,8 @@
 
     <!-- Views/Tabs container -->
     <f7-views tabs
-              class="safe-areas">
+              class="safe-areas"
+              v-if="signed_in">
       <!-- Tabbar for switching views-tabs -->
       <f7-toolbar tabbar
                   labels
@@ -75,6 +76,8 @@
                url="/settings/"></f7-view>
 
     </f7-views>
+    
+    <f7-view v-if="!signed_in" url="/signin/" :main="true"> </f7-view>
 
     <!-- Popup -->
     <f7-popup id="my-popup">
@@ -120,7 +123,8 @@
 </template>
 <script>
 import firebase from "firebase";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useStore} from "vuex";
 import { f7, f7ready } from "framework7-vue";
 import { getDevice } from "framework7/lite-bundle";
 import cordovaApp from "../js/cordova-app.js";
@@ -176,6 +180,13 @@ export default {
         }
       );
     };
+
+    // Identify if user is signed in
+    const stores = useStore()
+    const signed_in = computed(() => {
+      return stores.getters.signed_in;
+    })
+
     onMounted(() => {
       f7ready(() => {
         // Init cordova APIs (see cordova-app.js)
@@ -192,6 +203,7 @@ export default {
       username,
       password,
       alertLoginData,
+      signed_in,
     };
   },
 };

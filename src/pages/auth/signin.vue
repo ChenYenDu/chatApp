@@ -26,7 +26,7 @@
     </f7-list>
 
     <f7-block>
-      <f7-button outline>Sign in</f7-button><br>
+      <f7-button outline @click="signIn">Sign in</f7-button><br>
       <br>
 
       <div style="text-align: center;">
@@ -43,12 +43,23 @@
 </template>
 
 <script>
+import { mixin } from "../../js/mixin";
+
 export default {
+  mixins: [mixin],
   data() {
     return {
       email: null,
       password: null,
     };
   },
+  methods: {
+    signIn(){
+      var payload = {}
+      payload.email = this.email;
+      payload.password = this.password;
+      this.$store.dispatch('signIn', payload);
+    }
+  }
 };
 </script>
