@@ -34,6 +34,11 @@ const AuthModule = {
           commit('setAlertMessage', error.message);
         });
     },
+    signOut({ commit }) {
+      firebase.auth().signOut().then( () => {
+        commit('setSignedIn', false)
+      })
+    },
     signUp({ commit, dispatch }, payload) {
       firebase
         .auth()

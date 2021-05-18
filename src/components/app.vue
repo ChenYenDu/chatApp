@@ -1,27 +1,30 @@
 <template>
   <f7-app v-bind="f7params">
-
     <!-- Left panel with cover effect-->
-    <f7-panel left
-              cover
-              theme-dark>
+    <f7-panel left cover theme-dark>
       <f7-view>
         <f7-page>
           <f7-navbar title="Left Panel"></f7-navbar>
           <f7-list>
-            <f7-list-item link="/signin/"
-                          view=".view-main"
-                          panel-close
-                          title="Sign in"></f7-list-item>
+            <f7-list-item
+              link="/signin/"
+              view=".view-main"
+              panel-close
+              title="Sign in"
+            ></f7-list-item>
+            <f7-list-item
+              @click="signOut"
+              view=".view-main"
+              panel-close
+              title="Sign out"
+            ></f7-list-item>
           </f7-list>
         </f7-page>
       </f7-view>
     </f7-panel>
 
     <!-- Right panel with reveal effect-->
-    <f7-panel right
-              reveal
-              theme-dark>
+    <f7-panel right reveal theme-dark>
       <f7-view>
         <f7-page>
           <f7-navbar title="Right Panel"></f7-navbar>
@@ -31,52 +34,48 @@
     </f7-panel>
 
     <!-- Views/Tabs container -->
-    <f7-views tabs
-              class="safe-areas"
-              v-if="signed_in">
+    <f7-views tabs class="safe-areas" v-if="signed_in">
       <!-- Tabbar for switching views-tabs -->
-      <f7-toolbar tabbar
-                  labels
-                  bottom>
-        <f7-link tab-link="#view-home"
-                 tab-link-active
-                 icon-ios="f7:house_fill"
-                 icon-aurora="f7:house_fill"
-                 icon-md="material:home"
-                 text="Home"></f7-link>
-        <f7-link tab-link="#view-catalog"
-                 icon-ios="f7:square_list_fill"
-                 icon-aurora="f7:square_list_fill"
-                 icon-md="material:view_list"
-                 text="Catalog"></f7-link>
-        <f7-link tab-link="#view-settings"
-                 icon-ios="f7:gear"
-                 icon-aurora="f7:gear"
-                 icon-md="material:settings"
-                 text="Settings"></f7-link>
+      <f7-toolbar tabbar labels bottom>
+        <f7-link
+          tab-link="#view-home"
+          tab-link-active
+          icon-ios="f7:house_fill"
+          icon-aurora="f7:house_fill"
+          icon-md="material:home"
+          text="Home"
+        ></f7-link>
+        <f7-link
+          tab-link="#view-catalog"
+          icon-ios="f7:square_list_fill"
+          icon-aurora="f7:square_list_fill"
+          icon-md="material:view_list"
+          text="Catalog"
+        ></f7-link>
+        <f7-link
+          tab-link="#view-settings"
+          icon-ios="f7:gear"
+          icon-aurora="f7:gear"
+          icon-md="material:settings"
+          text="Settings"
+        ></f7-link>
       </f7-toolbar>
 
       <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
-      <f7-view id="view-home"
-               main
-               tab
-               tab-active
-               url="/"></f7-view>
+      <f7-view id="view-home" main tab tab-active url="/"></f7-view>
 
       <!-- Catalog View -->
-      <f7-view id="view-catalog"
-               name="catalog"
-               tab
-               url="/catalog/"></f7-view>
+      <f7-view id="view-catalog" name="catalog" tab url="/catalog/"></f7-view>
 
       <!-- Settings View -->
-      <f7-view id="view-settings"
-               name="settings"
-               tab
-               url="/settings/"></f7-view>
-
+      <f7-view
+        id="view-settings"
+        name="settings"
+        tab
+        url="/settings/"
+      ></f7-view>
     </f7-views>
-    
+
     <f7-view v-if="!signed_in" url="/signin/" :main="true"> </f7-view>
 
     <!-- Popup -->
@@ -100,20 +99,27 @@
         <f7-page login-screen>
           <f7-login-screen-title>Login</f7-login-screen-title>
           <f7-list form>
-            <f7-list-input type="text"
-                           name="username"
-                           placeholder="Your username"
-                           v-model:value="username"></f7-list-input>
-            <f7-list-input type="password"
-                           name="password"
-                           placeholder="Your password"
-                           v-model:value="password"></f7-list-input>
+            <f7-list-input
+              type="text"
+              name="username"
+              placeholder="Your username"
+              v-model:value="username"
+            ></f7-list-input>
+            <f7-list-input
+              type="password"
+              name="password"
+              placeholder="Your password"
+              v-model:value="password"
+            ></f7-list-input>
           </f7-list>
           <f7-list>
-            <f7-list-button title="Sign In"
-                            @click="alertLoginData"></f7-list-button>
+            <f7-list-button
+              title="Sign In"
+              @click="alertLoginData"
+            ></f7-list-button>
             <f7-block-footer>
-              Some text about login information.<br>Click "Sign In" to close Login Screen
+              Some text about login information.<br />Click "Sign In" to close
+              Login Screen
             </f7-block-footer>
           </f7-list>
         </f7-page>
@@ -124,7 +130,7 @@
 <script>
 import firebase from "firebase";
 import { ref, onMounted, computed } from "vue";
-import { useStore} from "vuex";
+import { useStore } from "vuex";
 import { f7, f7ready } from "framework7-vue";
 import { getDevice } from "framework7/lite-bundle";
 import cordovaApp from "../js/cordova-app.js";
@@ -182,10 +188,16 @@ export default {
     };
 
     // Identify if user is signed in
-    const stores = useStore()
+    const stores = useStore();
     const signed_in = computed(() => {
       return stores.getters.signed_in;
-    })
+    });
+
+    const signOut = () => {
+      const app = f7
+      stores.dispatch('signOut')
+      app.panel.close()
+    }
 
     onMounted(() => {
       f7ready(() => {
@@ -204,6 +216,7 @@ export default {
       password,
       alertLoginData,
       signed_in,
+      signOut,
     };
   },
 };
