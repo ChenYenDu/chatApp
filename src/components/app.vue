@@ -4,7 +4,10 @@
     <f7-panel left cover theme-dark>
       <f7-view>
         <f7-page>
-          <f7-navbar title="Left Panel"></f7-navbar>
+          <div class="wrapper">
+            <img class="image--cover" :src="photo_url" alt="" />
+          </div>
+            <f7-block style="text-align: center;">{{ display_name }}</f7-block>          
           <f7-list>
             <f7-list-item
               link="/signin/"
@@ -192,12 +195,18 @@ export default {
     const signed_in = computed(() => {
       return stores.getters.signed_in;
     });
+    const photo_url = computed(() => {
+      return stores.getters.photo_url;
+    });
+    const display_name = computed(() => {
+      return stores.getters.display_name;
+    });
 
     const signOut = () => {
-      const app = f7
-      stores.dispatch('signOut')
-      app.panel.close()
-    }
+      const app = f7;
+      stores.dispatch("signOut");
+      app.panel.close();
+    };
 
     onMounted(() => {
       f7ready(() => {
@@ -216,8 +225,25 @@ export default {
       password,
       alertLoginData,
       signed_in,
+      photo_url,
+      display_name,
       signOut,
     };
   },
 };
 </script>
+
+<style scoped>
+.wrapper {
+  text-align: center;
+}
+
+.image--cover {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 20px;
+  object-fit: cover;
+  object-position: center;
+}
+</style>
