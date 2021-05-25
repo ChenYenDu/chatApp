@@ -29,9 +29,16 @@
       <br />
 
       <div style="text-align: center">
-        <f7-link v-if="show_resend_email" @click="resendEmail" :color="color(time_left)">Resend Confirmation Email<span v-if="time_left > 0">({{time_left}})</span></f7-link><br />
+        <f7-link
+          v-if="show_resend_email"
+          @click="resendEmail"
+          :color="color(time_left)"
+          >Resend Confirmation Email<span v-if="time_left > 0"
+            >({{ time_left }})</span
+          ></f7-link
+        ><br />
         <f7-link href="/signup/">Dont' have an account? Sign up</f7-link><br />
-        <f7-link>Forget Password</f7-link><br />
+        <f7-link @click="forget_password">Forget Password</f7-link><br />
       </div>
     </f7-block>
   </f7-page>
@@ -39,6 +46,7 @@
 
 <script>
 import { mixin } from "../../js/mixin";
+import firebase from "firebase/app";
 
 export default {
   mixins: [mixin],
@@ -50,18 +58,37 @@ export default {
     };
   },
   methods: {
-    color(timeleft){
-      if (timeleft <= 0) {
-        return '#007aff'
+    forget_password() {
+      const self = this;
+      var auth = firebase.auth();
+
+      if (this.email != null) {
+        auth
+          .sendPasswordResetEmail(self.email)
+          .then(function () {
+            // Email sent.
+            self.$store.commit("setAlertMessage", "Reset email has been sent.");
+          })
+          .catch(function (error) {
+            // An error happened.
+            console.log(error);
+          });
       } else {
-        return 'gray'
+        self.$store.commit("setAlertMessage", "Please enter your email.")
+      }
+    },
+    color(timeleft) {
+      if (timeleft <= 0) {
+        return "#007aff";
+      } else {
+        return "gray";
       }
     },
     resendEmail() {
       const self = this;
       if (self.time_left <= 0) {
         self.$store.dispatch("sendVerification");
-        self.countDown()
+        self.countDown();
       }
     },
     countDown() {
@@ -83,9 +110,9 @@ export default {
     },
   },
   computed: {
-    show_resend_email: function(){
-      return this.$store.getters.show_resend_email
-    }
-  }
+    show_resend_email: function () {
+      return this.$store.getters.show_resend_email;
+    },
+  },
 };
 </script>
