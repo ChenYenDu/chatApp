@@ -4,10 +4,12 @@ const AuthModule = {
   state: {
     signed_in: false,
     signed_up: false,
+    show_resend_email: false,
   },
   getters: {
     signed_up: (state) => state.signed_up,
     signed_in: (state) => state.signed_in,
+    show_resend_email: state => state.show_resend_email,
   },
   mutations: {
     setSignedIn(state, payload) {
@@ -16,6 +18,9 @@ const AuthModule = {
     setSignedUp(state, payload) {
       state.signed_up = payload;
     },
+    setShowResendEmail(state, payload){
+      state.show_resend_email = payload;
+    }
   },
   actions: {
     signIn({ commit }, payload) {
@@ -26,7 +31,26 @@ const AuthModule = {
           // Signed in
           // var user = userCredential.user;
           // ...
-          commit('setSignedIn', true)
+          firebase.auth().onAuthStateChanged(function (user) {
+            if (user.emailVerified) {
+              // User is signed in.
+              commit("setSignedIn", true);
+              commit('setAlertMessage', `Welcome ${user.displayName}`);
+              console.log('verified')
+              commit("setShowResendEmail", false)
+
+
+            } else {
+              // No user is signed in.
+              commit("setSignedIn", false);
+              commit('setAlertMessage', 'Please verify with your email.')
+              commit("setShowResendEmail", true)
+
+            }
+          
+
+          });
+
         })
         .catch((error) => {
           // var errorCode = error.code;
