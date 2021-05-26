@@ -60,7 +60,7 @@
           icon-ios="f7:gear"
           icon-aurora="f7:gear"
           icon-md="material:settings"
-          text="Settings"
+          text="Edit Profile"
         ></f7-link>
       </f7-toolbar>
 
@@ -73,9 +73,9 @@
       <!-- Settings View -->
       <f7-view
         id="view-settings"
-        name="settings"
+        name="editprofile"
         tab
-        url="/settings/"
+        url="/editprofile/"
       ></f7-view>
     </f7-views>
 

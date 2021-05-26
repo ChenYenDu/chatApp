@@ -59,7 +59,6 @@
 <script>
 // import { f7 } from "framework7-vue";
 import { mixin } from "../../js/mixin";
-import routes from '../../js/routes';
 
 export default {
   mixins: [mixin],

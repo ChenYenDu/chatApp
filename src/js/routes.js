@@ -12,6 +12,7 @@ import NotFoundPage from '../pages/404.vue';
 
 import SignInPage from '../pages/auth/signin.vue';
 import SignUpPage from '../pages/auth/signup.vue';
+import EditProfilePage from '../pages/auth/editprofile.vue';
 
 var routes = [
   {
@@ -29,6 +30,10 @@ var routes = [
   {
     path: '/signup/',
     component: SignUpPage,
+  },
+  {
+    path: '/editprofile/',
+    component: EditProfilePage,
   },
   {
     path: '/form/',
