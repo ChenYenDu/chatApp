@@ -1,12 +1,14 @@
 import { createStore } from "vuex";
 import AuthModule from "./AuthModule";
 import FileModule from "./FileModule";
+import ChatModule from "./ChatModule";
 
 // Create a new store instance.
 const store = createStore({
   modules: {
     auth: AuthModule,
     file: FileModule,
+    chat: ChatModule,
   },
   state() {
     return {

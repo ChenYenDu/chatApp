@@ -12,7 +12,7 @@
       </f7-nav-left>
       <f7-nav-title sliding>chatApp</f7-nav-title>
       <f7-nav-right>
-        <f7-link icon-only>
+        <f7-link icon-only href="/requests/">
           <f7-icon
             ios="f7:person_circle_fill"
             aurora="f7:person_circle_fill"
@@ -22,7 +22,7 @@
           </f7-icon>
         </f7-link>
 
-        <f7-link icon-f7="plus"></f7-link>
+        <f7-link icon-f7="plus" href="/contacts/"></f7-link>
 
 
       </f7-nav-right>
