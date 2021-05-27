@@ -12,12 +12,19 @@
       </f7-nav-left>
       <f7-nav-title sliding>chatApp</f7-nav-title>
       <f7-nav-right>
-        <f7-link
-          icon-ios="f7:menu"
-          icon-aurora="f7:menu"
-          icon-md="material:menu"
-          panel-open="right"
-        ></f7-link>
+        <f7-link icon-only>
+          <f7-icon
+            ios="f7:person_circle_fill"
+            aurora="f7:person_circle_fill"
+            md="material:person"
+          >
+            <f7-badge color="red">5</f7-badge>
+          </f7-icon>
+        </f7-link>
+
+        <f7-link icon-f7="plus"></f7-link>
+
+
       </f7-nav-right>
       <f7-nav-title-large>chatApp</f7-nav-title-large>
     </f7-navbar>

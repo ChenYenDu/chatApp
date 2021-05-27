@@ -33,7 +33,7 @@
         @change="onFilePicked"
       />
     </f7-block>
-    {{ photo_url }}
+    {{ display_name }}
   </f7-page>
 </template>
 
@@ -117,7 +117,9 @@ export default {
               displayName: self.display_name,
 
           }).then(()=>{
-              self.$store.commit('setDisplayName', user.displayName)
+              self.$store.commit('setDisplayName', self.displayName)
+          }).catch(error => {
+              console.log(error)
           })
       }
     },
