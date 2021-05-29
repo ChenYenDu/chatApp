@@ -1,28 +1,68 @@
 import firebase from "firebase/app";
+import _ from "lodash";
+import { firerequest } from "./db";
 
 const ChatModule = {
   state: {
     contacts: [],
+    friend_requests: [],
   },
   getters: {
-    contacts: state => state.contacts,
+    contacts: (state) => state.contacts,
+    friend_requests: (state) => state.friend_requests,
   },
   mutations: {
-    setContacts(state, payload){
-        state.contacts = payload;
+    setContacts(state, payload) {
+      state.contacts = payload;
+    },
+    setFriendRequests(state, payload) {
+      state.friend_requests = payload;
     },
   },
   actions: {
-    getAllUsers({commit}){
-        var promise = new Promise((resolve, reject) => {
-            firebase.database().ref('users').on('value', function(snapshot){
-                commit('setContacts', snapshot.val())
-                resolve(snapshot.val())
-            })
-        })
-        return promise
-    }
-  }
+    async getMyRequests({ commit, dispatch }) {
+      var users = await dispatch("getAllUsers");
+      firerequest
+        .child(firebase.auth().currentUser.uid)
+        .on("value", (snapshot) => {
+          var frd_request_id = _.map(snapshot.val(), "sender");
+          var userdetails = [];
+
+          _.forEach(frd_request_id, (uid) => {
+            var user = _.find(users, ["uid", uid]);
+            userdetails.push(user);
+          });
+          commit("setFriendRequests", userdetails);
+        });
+    },
+    getAllUsers({ commit }) {
+      var promise = new Promise((resolve, reject) => {
+        firebase
+          .database()
+          .ref("users")
+          .on("value", function (snapshot) {
+            commit("setContacts", snapshot.val());
+            resolve(snapshot.val());
+          });
+      });
+      return promise;
+    },
+    sendRequest({ commit }, payload) {
+      var promise = new Promise((resolve, reject) => {
+        firerequest
+          .child(payload.recipient)
+          .push({ sender: payload.sender })
+          .then(() => {
+            resolve({ success: true });
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+
+      return promise;
+    },
+  },
 };
 
 export default ChatModule;
