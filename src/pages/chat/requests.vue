@@ -13,7 +13,7 @@
           <img class="small-avatar" :src="request.photo_url" width="80" />
         </template>
         <f7-swipeout-actions right>
-          <f7-swipeout-button color="green" @click="comfirm(request)"
+          <f7-swipeout-button color="green" @click="confirm(request)"
             >Confirm</f7-swipeout-button
           >
           <f7-swipeout-button color="red" @click="remove(request)"
@@ -28,8 +28,12 @@
 <script>
 export default {
   methods: {
-    confirm(request) {},
-    remove(request) {},
+    confirm(request) {
+      this.$store.dispatch('confirmRequest', request)
+    },
+    remove(request) {
+      this.$store.dispatch('deleteRequest', request)
+    },
   },
   computed: {
     friend_requests() {

@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
-import _ from "lodash";
-import { firerequest } from "./db";
+import _, { reject } from "lodash";
+import { firerequest, firefriends } from "./db";
 
 const ChatModule = {
   state: {
@@ -20,6 +20,56 @@ const ChatModule = {
     },
   },
   actions: {
+    confirmRequest({ dispatch }, payload) {
+      var promise = new Promise((resolve, reject) => {
+        // push friend id to current user friend node
+        firefriends
+          .child(firebase.auth().currentUser.uid)
+          .push({ uid: payload.uid })
+          .then(() => {
+            // push current user's id to the frineds node
+            firefriends
+              .child(payload.uid)
+              .push({ uid: firebase.auth().currentUser.uid });
+          })
+          .then(() => {
+            dispatch("deleteRequest", payload).then(() => {
+              resolve(true);
+            });
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+
+      return promise;
+    },
+    deleteRequest({}, payload) {
+      var promise = new Promise((resolve, reject) => {
+        firerequest
+          .child(firebase.auth().currentUser.uid)
+          .orderByChild("sender")
+          .equalTo(payload.uid)
+          .once("value", (snapshot) => {
+            let userkey;
+            for (var key in snapshot.val()) userkey = key;
+            firerequest
+              .child(firebase.auth().currentUser.uid)
+              .child(userkey)
+              .remove()
+              .then(() => {
+                resolve(true);
+              })
+              .catch((error) => {
+                reject(error);
+              });
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+      return promise;
+    },
     async getMyRequests({ commit, dispatch }) {
       var users = await dispatch("getAllUsers");
       firerequest
