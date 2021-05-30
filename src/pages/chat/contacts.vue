@@ -1,7 +1,7 @@
 <template>
   <f7-page name="about">
     <f7-navbar title="Contact" back-link="Back"></f7-navbar>
-    <f7-block-title>About My App</f7-block-title>
+    <f7-block-title>Contacts</f7-block-title>
     <f7-list media-list>
       <f7-list-item
         v-for="(contact, index) in contacts"
